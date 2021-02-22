@@ -16,15 +16,8 @@ public class WorldLoader : MonoBehaviour {
 	private HashSet<Chunk> loadedChunks;
 
 	void Start() {
-
+		WorldData.InitializeWorld();
 		loadedChunks = new HashSet<Chunk>();
-
-		int n = 16;
-		for (int x = 0; x < n; x++) {
-			for (int y = 0; y < n; y++) {
-				if (WorldData.ContainsChunk(x, y)) InstantiateChunk(x, y);
-			}
-		}
 	}
 
 	private void Update() {
@@ -46,8 +39,10 @@ public class WorldLoader : MonoBehaviour {
 			for (int y = -RENDER_DISTANCE; y < RENDER_DISTANCE + 1; y++) {
 				int chunkX = px + x;
 				int chunkY = py + y;
+				// If the chunk does not exist yet, generate it
 				if (!WorldData.ContainsChunk(chunkX, chunkY)) {
-					WorldData.GenerateChunk(chunkX, chunkY);
+					bool[,] tiles = WorldGen.GenerateChunk(chunkX, chunkY);
+					WorldData.GenerateChunk(chunkX, chunkY, tiles);
 					InstantiateChunk(chunkX, chunkY);
 				}
 				chunksToLoad.Add(WorldData.chunks[chunkX, chunkY]);
