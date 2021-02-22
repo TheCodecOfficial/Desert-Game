@@ -13,7 +13,12 @@ public class WorldLoader : MonoBehaviour {
 
 	public int RENDER_DISTANCE = 4;
 
+	private HashSet<Chunk> loadedChunks;
+
 	void Start() {
+
+		loadedChunks = new HashSet<Chunk>();
+
 		int n = 16;
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
@@ -22,19 +27,16 @@ public class WorldLoader : MonoBehaviour {
 		}
 	}
 
-	float time = 0;
 	private void Update() {
-		time += Time.deltaTime;
-		if (time > 0.2f) {
-			LoadCycle();
-			time = 0;
-		}
+		LoadCycle();
 	}
 
 	public void LoadCycle() {
-		HideAllChunks();
+		//HideAllChunks();
 
 		int chunkSize = WorldData.CHUNK_SIZE;
+
+		HashSet<Chunk> chunksToLoad = new HashSet<Chunk>();
 
 		Vector3 playerPosition = player.position;
 		int px = Mathf.FloorToInt(playerPosition.x / chunkSize);
@@ -44,21 +46,42 @@ public class WorldLoader : MonoBehaviour {
 			for (int y = -RENDER_DISTANCE; y < RENDER_DISTANCE + 1; y++) {
 				int chunkX = px + x;
 				int chunkY = py + y;
-				ShowChunk(chunkX, chunkY);
+				if (!WorldData.ContainsChunk(chunkX, chunkY)) {
+					WorldData.GenerateChunk(chunkX, chunkY);
+					InstantiateChunk(chunkX, chunkY);
+				}
+				chunksToLoad.Add(WorldData.chunks[chunkX, chunkY]);
 			}
+		}
+
+		// Only hide the chunks that were loaded but shouldn't be loaded anymore
+		loadedChunks.ExceptWith(chunksToLoad);
+		HideChunks(loadedChunks);
+
+		// Show all chunks in renderdistance
+		loadedChunks.Clear();
+		ShowChunks(chunksToLoad);
+	}
+
+	public void ShowChunks(HashSet<Chunk> chunks) {
+		foreach (Chunk chunk in chunks) {
+			ShowChunk(chunk);
 		}
 	}
 
-	public void ShowChunk(int x, int y) {
+	/*public void ShowChunk(int x, int y) {
 		if (WorldData.ContainsChunk(x, y)) ShowChunk(WorldData.chunks[x, y]);
-	}
+	}*/
 
 	public void ShowChunk(Chunk chunk) {
-		if (WorldData.ContainsChunk(chunk) && chunk.reference != null) chunk.reference.gameObject.SetActive(true);
+		if (WorldData.ContainsChunk(chunk) && chunk.reference != null) {
+			chunk.reference.gameObject.SetActive(true);
+			loadedChunks.Add(chunk);
+		}
 	}
 
-	public void HideAllChunks() {
-		foreach (Chunk chunk in WorldData.chunks.Values) {
+	public void HideChunks(HashSet<Chunk> chunks) {
+		foreach (Chunk chunk in chunks) {
 			HideChunk(chunk);
 		}
 	}
@@ -86,9 +109,11 @@ public class WorldLoader : MonoBehaviour {
 		for (int cx = 0; cx < chunkSize; cx++) {
 			for (int cy = 0; cy < chunkSize; cy++) {
 				Vector3 position = new Vector3(chunkX + cx, 0, chunkY + cy);
-				if (chunk.tiles[cx, cy]) Instantiate(cactusPrefab, position, Quaternion.identity, chunkParent);
+				Quaternion rot = Quaternion.Euler(0, Random.value * 360, 0);
+				if (chunk.tiles[cx, cy]) Instantiate(cactusPrefab, position, rot, chunkParent);
 				Instantiate(sandPrefab, position, Quaternion.identity, chunkParent);
 			}
 		}
+		HideChunk(chunk);
 	}
 }
