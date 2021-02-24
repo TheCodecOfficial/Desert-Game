@@ -53,7 +53,7 @@ public class WorldLoader : MonoBehaviour {
 		loadedChunks.ExceptWith(chunksToLoad);
 		HideChunks(loadedChunks);
 
-		// Show all chunks in renderdistance
+		// Show all chunks in render distance
 		loadedChunks.Clear();
 		ShowChunks(chunksToLoad);
 	}
@@ -101,14 +101,37 @@ public class WorldLoader : MonoBehaviour {
 		chunk.reference = chunkParent;
 		WorldData.chunks[x, y] = chunk;
 
+		Vector3 position;
 		for (int cx = 0; cx < chunkSize; cx++) {
 			for (int cy = 0; cy < chunkSize; cy++) {
-				Vector3 position = new Vector3(chunkX + cx, 0, chunkY + cy);
+				position = new Vector3(chunkX + cx, 0, chunkY + cy);
 				Quaternion rot = Quaternion.Euler(0, Random.value * 360, 0);
 				if (chunk.tiles[cx, cy]) Instantiate(cactusPrefab, position, rot, chunkParent);
-				Instantiate(sandPrefab, position, Quaternion.identity, chunkParent);
 			}
 		}
+		position = new Vector3(chunkX + chunkSize / 2f - 0.5f, 0, chunkY + chunkSize / 2f - 0.5f); // Center sand plane
+		Transform sandPlane = Instantiate(sandPrefab, position, Quaternion.identity, chunkParent).transform;
+		sandPlane.localScale = new Vector3(chunkSize, 1, chunkSize) * 0.1f; // 0.1 Because Plane is 10 x 10 units by default
+		sandPlane.GetComponent<Renderer>().materials[0].mainTextureScale = Vector2.one * chunkSize;
 		HideChunk(chunk);
+	}
+
+	private void OnDrawGizmos() {
+
+		Gizmos.color = Color.magenta;
+
+		int chunkSize = WorldData.CHUNK_SIZE;
+
+		Vector3 playerPosition = player.position;
+		int px = Mathf.FloorToInt(playerPosition.x / chunkSize);
+		int py = Mathf.FloorToInt(playerPosition.z / chunkSize);
+
+		for (int x = -RENDER_DISTANCE; x < RENDER_DISTANCE + 1; x++) {
+			for (int y = -RENDER_DISTANCE; y < RENDER_DISTANCE + 1; y++) {
+				int chunkX = chunkSize * (px + x);
+				int chunkY = chunkSize * (py + y);
+				Gizmos.DrawWireCube(new Vector3(chunkX + chunkSize / 2f - 0.5f, 0.01f, chunkY + chunkSize / 2f - 0.5f), new Vector3(chunkSize, 0, chunkSize));
+			}
+		}
 	}
 }
