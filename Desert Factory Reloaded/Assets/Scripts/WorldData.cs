@@ -50,6 +50,19 @@ public struct Chunk {
 	public Transform reference;
 }
 
+public class Tile {
+	public Transform objectReference;
+}
+
+public class CactusTile : Tile {
+	public int growthStage;
+}
+
+public class MachineTile : Tile {
+	
+}
+
+
 public class Dictionary<TKey1, TKey2, TValue> : Dictionary<Tuple<TKey1, TKey2>, TValue>, IDictionary<Tuple<TKey1, TKey2>, TValue> {
 
 	public TValue this[TKey1 key1, TKey2 key2] {
