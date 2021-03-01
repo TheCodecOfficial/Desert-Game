@@ -34,6 +34,15 @@ public class WorldData
 		return chunks.ContainsValue(chunk);
 	}
 
+	public static void UpdateTile(int x, int y, int type) {
+		Tile tile = GetTile(x, y);
+		tile.type = type;
+		if (type == 0) {
+			// TEMPORARY
+			tile.objectReference.gameObject.SetActive(false);
+		}
+	}
+
 	public static Tile GetTile(int x, int y) {
 		int cx = x / CHUNK_SIZE;
 		int cy = y / CHUNK_SIZE;

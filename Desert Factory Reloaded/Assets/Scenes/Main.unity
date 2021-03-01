@@ -917,6 +917,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionOverlay: {fileID: 1412460443}
   selectedType: 0
+  ACTION_TIME: 1
+  currentTileTime: 0
+  acionTimeSlider: {fileID: 714418313}
 --- !u!1 &1221202918
 GameObject:
   m_ObjectHideFlags: 0

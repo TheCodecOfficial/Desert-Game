@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
@@ -9,16 +10,32 @@ public class InputManager : MonoBehaviour
 	// REALLY TEMPORARY
 	public int selectedType;
 
-    void Update()
+	public float ACTION_TIME = 1f;
+	public float currentTileTime;
+
+	public Slider acionTimeSlider;
+
+	Vector2Int mousePos;
+
+	private void Start() {
+		mousePos = Vector2Int.zero;
+	}
+
+	void Update()
     {
 		selectionOverlay.gameObject.SetActive(false);
 		if (ScreenToWorld.MouseOverGround()) {
 			DisplayOverlay();
 
 			if (Input.GetMouseButton(0)) {
-				Vector2Int mousePos = ScreenToWorld.GetMousePoint();
-				int mouseOverType = WorldData.GetTile(mousePos.x, mousePos.y).type;
+				Vector2Int newMousePos = ScreenToWorld.GetMousePoint();
 
+				if (newMousePos != mousePos) currentTileTime = 0;
+				mousePos = newMousePos;
+
+				IncreaseActionTime();
+
+				int mouseOverType = WorldData.GetTile(mousePos.x, mousePos.y).type;
 				switch (mouseOverType) {
 					case 0:
 						// Mouse over sand / empty tile
@@ -27,7 +44,7 @@ public class InputManager : MonoBehaviour
 						break;
 					case 1:
 						// Mouse over cactus
-						if (selectedType == 0) Debug.Log("harvest cactus");
+						if (selectedType == 0) HarvestCactus();
 						if (selectedType == 3) Debug.Log("harvest cactus");
 						break;
 					case 2:
@@ -39,6 +56,22 @@ public class InputManager : MonoBehaviour
 			}
 		}
     }
+	
+	void HarvestCactus() {
+		if (TimeOver()) {
+			WorldData.UpdateTile(mousePos.x, mousePos.y, 0);
+		}
+	}
+
+	void IncreaseActionTime() {
+		currentTileTime += Time.deltaTime;
+		if (TimeOver()) currentTileTime = 0;
+		acionTimeSlider.value = currentTileTime / ACTION_TIME;
+	}
+
+	bool TimeOver() {
+		return (currentTileTime >= ACTION_TIME);
+	}
 
 	void DisplayOverlay() {
 		Vector2 mousePos = ScreenToWorld.GetMousePoint();
