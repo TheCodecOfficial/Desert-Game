@@ -3,36 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldGen : MonoBehaviour {
-	/*void Start() {
-		WorldData.InitializeWorld();
 
-		// Create n x n chunks
-		int n = 16;
+	public static Tile[,] GenerateChunk(int x, int y) {
 		int chunkSize = WorldData.CHUNK_SIZE;
-		for (int x = 0; x < n; x++) {
-			for (int y = 0; y < n; y++) {
-				Chunk chunk = WorldData.GenerateChunk(x, y);
-				for (int cx = 0; cx < chunkSize; cx++) {
-					for (int cy = 0; cy < chunkSize; cy++) {
-						int px = x * chunkSize + cx;
-						int py = y * chunkSize + cy;
-						float perlin = FractalNoise(px * 0.1f, py * 0.1f, 4, 2, 0.5f);
-						chunk.tiles[cx, cy] = (perlin > 0.6f);
-					}
-				}
-			}
-		}
-	}*/
-
-	public static bool[,] GenerateChunk(int x, int y) {
-		int chunkSize = WorldData.CHUNK_SIZE;
-		bool[,] tiles = new bool[chunkSize, chunkSize];
+		Tile[,] tiles = new Tile[chunkSize, chunkSize];
 		for (int cx = 0; cx < chunkSize; cx++) {
 			for (int cy = 0; cy < chunkSize; cy++) {
 				int px = x * chunkSize + cx;
 				int py = y * chunkSize + cy;
 				float perlin = FractalNoise(px * 0.1f, py * 0.1f, 8, 6.5f, 0.5f);
-				tiles[cx, cy] = (perlin < 0.3f);
+				int type = (perlin < 0.3f) ? 1 : 0;
+				tiles[cx, cy] = new Tile(type);
 			}
 		}
 		return tiles;

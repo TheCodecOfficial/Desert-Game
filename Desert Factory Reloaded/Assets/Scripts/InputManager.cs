@@ -4,30 +4,46 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-
 	public Transform selectionOverlay;
 
-    void Start()
-    {
-        
-    }
+	// REALLY TEMPORARY
+	public int selectedType;
 
     void Update()
     {
+		selectionOverlay.gameObject.SetActive(false);
 		if (ScreenToWorld.MouseOverGround()) {
-			Vector2 mousePos = ScreenToWorld.GetMousePoint();
-			Vector3 pos = new Vector3(mousePos.x, 0.01f, mousePos.y);
-			selectionOverlay.position = pos;
+			DisplayOverlay();
+
+			if (Input.GetMouseButton(0)) {
+				Vector2Int mousePos = ScreenToWorld.GetMousePoint();
+				int mouseOverType = WorldData.GetTile(mousePos.x, mousePos.y).type;
+
+				switch (mouseOverType) {
+					case 0:
+						// Mouse over sand / empty tile
+						if (selectedType == 1) Debug.Log("plant cactus");
+						if (selectedType == 2) Debug.Log("place building");
+						break;
+					case 1:
+						// Mouse over cactus
+						if (selectedType == 0) Debug.Log("harvest cactus");
+						if (selectedType == 3) Debug.Log("harvest cactus");
+						break;
+					case 2:
+						// Mouse over machine
+						if (selectedType == 0) Debug.Log("open building GUI");
+						if (selectedType == 3) Debug.Log("destroy building");
+						break;
+				}
+			}
 		}
     }
 
-	private void OnDrawGizmos() {
-		if (ScreenToWorld.MouseOverGround()) {
-			Vector2 mousePoint = ScreenToWorld.GetMousePoint();
-
-			Vector3 pos = new Vector3(mousePoint.x, 0.01f, mousePoint.y);
-
-			Gizmos.DrawCube(pos, new Vector3(1f, 0, 1f));
-		}
+	void DisplayOverlay() {
+		Vector2 mousePos = ScreenToWorld.GetMousePoint();
+		Vector3 pos = new Vector3(mousePos.x, 0.01f, mousePos.y);
+		selectionOverlay.position = pos;
+		selectionOverlay.gameObject.SetActive(true);
 	}
 }

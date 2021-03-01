@@ -41,7 +41,7 @@ public class WorldLoader : MonoBehaviour {
 				int chunkY = py + y;
 				// If the chunk does not exist yet, generate it
 				if (!WorldData.ContainsChunk(chunkX, chunkY)) {
-					bool[,] tiles = WorldGen.GenerateChunk(chunkX, chunkY);
+					Tile[,] tiles = WorldGen.GenerateChunk(chunkX, chunkY);
 					WorldData.GenerateChunk(chunkX, chunkY, tiles);
 					InstantiateChunk(chunkX, chunkY);
 				}
@@ -106,7 +106,7 @@ public class WorldLoader : MonoBehaviour {
 			for (int cy = 0; cy < chunkSize; cy++) {
 				position = new Vector3(chunkX + cx, 0, chunkY + cy);
 				Quaternion rot = Quaternion.Euler(0, Random.value * 360, 0);
-				if (chunk.tiles[cx, cy]) Instantiate(cactusPrefab, position, rot, chunkParent);
+				if (chunk.tiles[cx, cy].type == 1) Instantiate(cactusPrefab, position, rot, chunkParent);
 			}
 		}
 		position = new Vector3(chunkX + chunkSize / 2f - 0.5f, 0, chunkY + chunkSize / 2f - 0.5f); // Center sand plane

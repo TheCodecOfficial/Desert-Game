@@ -16,10 +16,10 @@ public class WorldData
 	}
 
 	public static Chunk GenerateChunk(int x, int y) {
-		return GenerateChunk(x, y, new bool[CHUNK_SIZE, CHUNK_SIZE]);
+		return GenerateChunk(x, y, new Tile[CHUNK_SIZE, CHUNK_SIZE]);
 	}
 
-	public static Chunk GenerateChunk(int x, int y, bool[,] chunkData) {
+	public static Chunk GenerateChunk(int x, int y, Tile[,] chunkData) {
 		Chunk chunk = new Chunk() { tiles = chunkData };
 		chunks[x, y] = chunk;
 		//chunkList.Add(chunk);
@@ -34,32 +34,33 @@ public class WorldData
 		return chunks.ContainsValue(chunk);
 	}
 
-	public static void PrintChunk(Chunk chunk) {
-		for (int x = 0; x < CHUNK_SIZE; x++) {
-			string s = "";
-			for (int y = 0; y < CHUNK_SIZE; y++) {
-				s += (chunk.tiles[x, y]) ? 1 : 0;
-			}
-			Debug.Log(s);
-		}
+	public static Tile GetTile(int x, int y) {
+		int cx = x / CHUNK_SIZE;
+		int cy = y / CHUNK_SIZE;
+		x %= CHUNK_SIZE;
+		y %= CHUNK_SIZE;
+
+		if (x < 0) { x += CHUNK_SIZE; cx--; }
+		if (y < 0) { y += CHUNK_SIZE; cy--; }
+
+		return chunks[cx, cy].tiles[x, y];
 	}
 }
 
 public struct Chunk {
-	public bool[,] tiles;
+	public Tile[,] tiles;
 	public Transform reference;
 }
 
 public class Tile {
 	public Transform objectReference;
-}
 
-public class CactusTile : Tile {
-	public int growthStage;
-}
+	// 0: Sand / Nothing, 1: Cactus, 2: Machine
+	public int type;
 
-public class MachineTile : Tile {
-	
+	public Tile(int type) {
+		this.type = type;
+	}
 }
 
 
