@@ -12,6 +12,7 @@ public class InputManager : MonoBehaviour
 
 	public float ACTION_TIME = 1f;
 	public float currentTileTime;
+	bool timeOver;
 
 	public Slider acionTimeSlider;
 
@@ -26,6 +27,7 @@ public class InputManager : MonoBehaviour
 		selectionOverlay.gameObject.SetActive(false);
 		if (ScreenToWorld.MouseOverGround()) {
 			DisplayOverlay();
+			DisableSlider();
 
 			if (Input.GetMouseButton(0)) {
 				Vector2Int newMousePos = ScreenToWorld.GetMousePoint();
@@ -39,7 +41,7 @@ public class InputManager : MonoBehaviour
 				switch (mouseOverType) {
 					case 0:
 						// Mouse over sand / empty tile
-						if (selectedType == 1) Debug.Log("plant cactus");
+						if (selectedType == 1) PlantCactus();
 						if (selectedType == 2) Debug.Log("place building");
 						break;
 					case 1:
@@ -56,21 +58,34 @@ public class InputManager : MonoBehaviour
 			}
 		}
     }
+
+	void PlantCactus() {
+		WorldData.UpdateTile(mousePos.x, mousePos.y, 1);
+	}
 	
 	void HarvestCactus() {
-		if (TimeOver()) {
+		EnableSlider();
+		if (timeOver) {
+			Debug.Log("Harvest Cactus");
 			WorldData.UpdateTile(mousePos.x, mousePos.y, 0);
 		}
 	}
 
 	void IncreaseActionTime() {
 		currentTileTime += Time.deltaTime;
-		if (TimeOver()) currentTileTime = 0;
+
+		timeOver = (currentTileTime >= ACTION_TIME);
+
+		if (timeOver) currentTileTime = 0;
 		acionTimeSlider.value = currentTileTime / ACTION_TIME;
 	}
 
-	bool TimeOver() {
-		return (currentTileTime >= ACTION_TIME);
+	void EnableSlider() {
+		acionTimeSlider.gameObject.SetActive(true);
+	}
+
+	void DisableSlider() {
+		acionTimeSlider.gameObject.SetActive(false);
 	}
 
 	void DisplayOverlay() {

@@ -16,7 +16,7 @@ public class WorldLoader : MonoBehaviour {
 	private HashSet<Chunk> loadedChunks;
 
 	void Start() {
-		WorldData.InitializeWorld();
+		WorldData.InitializeWorld(this);
 		loadedChunks = new HashSet<Chunk>();
 	}
 
@@ -25,8 +25,6 @@ public class WorldLoader : MonoBehaviour {
 	}
 
 	public void LoadCycle() {
-		//HideAllChunks();
-
 		int chunkSize = WorldData.CHUNK_SIZE;
 
 		HashSet<Chunk> chunksToLoad = new HashSet<Chunk>();
@@ -63,10 +61,6 @@ public class WorldLoader : MonoBehaviour {
 			ShowChunk(chunk);
 		}
 	}
-
-	/*public void ShowChunk(int x, int y) {
-		if (WorldData.ContainsChunk(x, y)) ShowChunk(WorldData.chunks[x, y]);
-	}*/
 
 	public void ShowChunk(Chunk chunk) {
 		if (WorldData.ContainsChunk(chunk) && chunk.reference != null) {
@@ -117,6 +111,24 @@ public class WorldLoader : MonoBehaviour {
 		sandPlane.localScale = new Vector3(chunkSize, 1, chunkSize) * 0.1f; // 0.1 Because Plane is 10 x 10 units by default
 		sandPlane.GetComponent<Renderer>().materials[0].mainTextureScale = Vector2.one * chunkSize;
 		HideChunk(chunk);
+	}
+
+	public void UpdateTile(int x, int y) {
+		Tile tile = WorldData.GetTile(x, y);
+		Chunk chunk = WorldData.GetChunk(x, y);
+		if (tile.objectReference != null) Destroy(tile.objectReference.gameObject);
+		if (tile.type == 0) {
+			// Tile should be empty / sand
+			// Nothing moment
+		} else if (tile.type == 1) {
+			// Tile should be cactus
+			Vector3 position = new Vector3(x, 0, y);
+			Transform objectReference = Instantiate(cactusPrefab, position, Quaternion.identity, chunk.reference).transform;
+			tile.objectReference = objectReference;
+		} else {
+			// Tile should be machine
+			// TODO
+		}
 	}
 
 	private void OnDrawGizmos() {

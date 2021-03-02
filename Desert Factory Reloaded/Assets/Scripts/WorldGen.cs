@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldGen : MonoBehaviour {
+public class WorldGen {
 
 	public static Tile[,] GenerateChunk(int x, int y) {
 		int chunkSize = WorldData.CHUNK_SIZE;

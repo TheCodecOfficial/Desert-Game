@@ -7,12 +7,13 @@ public class WorldData
 {
 	public const int CHUNK_SIZE = 16;
 
+	static WorldLoader worldLoader;
+
 	public static Dictionary<int, int, Chunk> chunks;
-	//public static List<Chunk> chunkList;
 	
-	public static void InitializeWorld() {
+	public static void InitializeWorld(WorldLoader wl) {
 		chunks = new Dictionary<int, int, Chunk>();
-		//chunkList = new List<Chunk>();
+		worldLoader = wl;
 	}
 
 	public static Chunk GenerateChunk(int x, int y) {
@@ -22,7 +23,6 @@ public class WorldData
 	public static Chunk GenerateChunk(int x, int y, Tile[,] chunkData) {
 		Chunk chunk = new Chunk() { tiles = chunkData };
 		chunks[x, y] = chunk;
-		//chunkList.Add(chunk);
 		return chunk;
 	}
 
@@ -37,22 +37,35 @@ public class WorldData
 	public static void UpdateTile(int x, int y, int type) {
 		Tile tile = GetTile(x, y);
 		tile.type = type;
-		if (type == 0) {
-			// TEMPORARY
-			tile.objectReference.gameObject.SetActive(false);
-		}
+		worldLoader.UpdateTile(x, y);
 	}
 
 	public static Tile GetTile(int x, int y) {
-		int cx = x / CHUNK_SIZE;
-		int cy = y / CHUNK_SIZE;
+		Vector2Int chunkCoords = WorldToChunkCoords(x, y);
+		int cx = chunkCoords.x;
+		int cy = chunkCoords.y;
 		x %= CHUNK_SIZE;
 		y %= CHUNK_SIZE;
 
-		if (x < 0) { x += CHUNK_SIZE; cx--; }
-		if (y < 0) { y += CHUNK_SIZE; cy--; }
+		if (x < 0) x += CHUNK_SIZE;
+		if (y < 0) y += CHUNK_SIZE;
 
 		return chunks[cx, cy].tiles[x, y];
+	}
+
+	public static Chunk GetChunk(int x, int y) {
+		Vector2Int chunkCoords = WorldToChunkCoords(x, y);
+		int cx = chunkCoords.x;
+		int cy = chunkCoords.y;
+		return chunks[cx, cy];
+	}
+
+	static Vector2Int WorldToChunkCoords(int x, int y) {
+		int cx = x / CHUNK_SIZE;
+		int cy = y / CHUNK_SIZE;
+		if (x < 0) cx--;
+		if (y < 0) cy--;
+		return new Vector2Int(cx, cy);
 	}
 }
 

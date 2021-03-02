@@ -572,7 +572,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 757211433}
   m_HandleRect: {fileID: 0}
@@ -850,28 +850,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1210320445}
-  - component: {fileID: 1210320444}
   - component: {fileID: 1210320446}
   - component: {fileID: 1210320447}
   m_Layer: 0
-  m_Name: WorldGen
+  m_Name: Game Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1210320444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210320443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe05a97bb9a89f64cba9c65f7362e345, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1210320445
 Transform:
   m_ObjectHideFlags: 0
