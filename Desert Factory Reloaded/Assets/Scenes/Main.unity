@@ -903,7 +903,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionOverlay: {fileID: 1412460443}
-  selectedType: 0
+  selectedType: 1
   ACTION_TIME: 1
   currentTileTime: 0
   acionTimeSlider: {fileID: 714418313}
@@ -1029,7 +1029,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406102057}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.5, y: 0, z: 0}
+  m_LocalPosition: {x: -7.7, y: 0, z: 10.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1221202919}
