@@ -61,10 +61,8 @@ public class WorldData
 	}
 
 	static Vector2Int WorldToChunkCoords(int x, int y) {
-		int cx = x / CHUNK_SIZE;
-		int cy = y / CHUNK_SIZE;
-		if (x < 0) cx--;
-		if (y < 0) cy--;
+		int cx = Mathf.FloorToInt((float)x / CHUNK_SIZE);
+		int cy = Mathf.FloorToInt((float)y / CHUNK_SIZE);
 		return new Vector2Int(cx, cy);
 	}
 }

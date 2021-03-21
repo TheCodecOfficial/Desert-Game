@@ -6,7 +6,7 @@ public class WorldLoader : MonoBehaviour {
 
 	public Transform world;
 
-	public Transform player;
+	//public Transform player;
 
 	public GameObject sandPrefab;
 	public GameObject cactusPrefab;
@@ -29,7 +29,7 @@ public class WorldLoader : MonoBehaviour {
 
 		HashSet<Chunk> chunksToLoad = new HashSet<Chunk>();
 
-		Vector3 playerPosition = player.position;
+		Vector3 playerPosition = PlayerInfo.getPosition();
 		int px = Mathf.FloorToInt(playerPosition.x / chunkSize);
 		int py = Mathf.FloorToInt(playerPosition.z / chunkSize);
 
@@ -137,7 +137,7 @@ public class WorldLoader : MonoBehaviour {
 
 		int chunkSize = WorldData.CHUNK_SIZE;
 
-		Vector3 playerPosition = player.position;
+		Vector3 playerPosition = PlayerInfo.getPosition();
 		int px = Mathf.FloorToInt(playerPosition.x / chunkSize);
 		int py = Mathf.FloorToInt(playerPosition.z / chunkSize);
 

@@ -25,15 +25,19 @@ public class InputManager : MonoBehaviour
 	void Update()
     {
 		selectionOverlay.gameObject.SetActive(false);
+
 		if (ScreenToWorld.MouseOverGround()) {
+
+			PlayerInfo.canMove = true;
+
 			DisplayOverlay();
 			DisableSlider();
 
-			if (Input.GetMouseButton(0)) {
-				Vector2Int newMousePos = ScreenToWorld.GetMousePoint();
+			Vector2Int newMousePos = ScreenToWorld.GetMousePoint();
+			if (newMousePos != mousePos) currentTileTime = 0;
+			mousePos = newMousePos;
 
-				if (newMousePos != mousePos) currentTileTime = 0;
-				mousePos = newMousePos;
+			if (Input.GetMouseButton(0)) {
 
 				IncreaseActionTime();
 
@@ -64,10 +68,13 @@ public class InputManager : MonoBehaviour
 	}
 	
 	void HarvestCactus() {
+		PlayerInfo.canMove = false;
 		EnableSlider();
 		if (timeOver) {
 			Debug.Log("Harvest Cactus");
 			WorldData.UpdateTile(mousePos.x, mousePos.y, 0);
+
+			PlayerInfo.canMove = true;
 		}
 	}
 
@@ -89,7 +96,7 @@ public class InputManager : MonoBehaviour
 	}
 
 	void DisplayOverlay() {
-		Vector2 mousePos = ScreenToWorld.GetMousePoint();
+		//Vector2 mousePos = ScreenToWorld.GetMousePoint();
 		Vector3 pos = new Vector3(mousePos.x, 0.01f, mousePos.y);
 		selectionOverlay.position = pos;
 		selectionOverlay.gameObject.SetActive(true);

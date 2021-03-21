@@ -5,14 +5,15 @@ using UnityEngine;
 public class PlayerInfo : MonoBehaviour
 {
 
-    void Start()
-    {
-        
-    }
+	static new Transform transform;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public static bool canMove;
+
+	public void Start() {
+		transform = gameObject.transform;
+	}
+
+	public static Vector3 getPosition() {
+		return transform.position;
+	}
 }
