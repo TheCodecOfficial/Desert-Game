@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldGen {
-
 	public static Tile[,] GenerateChunk(int x, int y) {
 		int chunkSize = WorldData.CHUNK_SIZE;
 		Tile[,] tiles = new Tile[chunkSize, chunkSize];

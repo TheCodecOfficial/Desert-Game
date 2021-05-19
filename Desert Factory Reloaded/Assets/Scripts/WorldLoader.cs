@@ -131,7 +131,7 @@ public class WorldLoader : MonoBehaviour {
 		}
 	}
 
-	private void OnDrawGizmos() {
+	/*private void OnDrawGizmos() {
 
 		Gizmos.color = Color.magenta;
 
@@ -148,5 +148,5 @@ public class WorldLoader : MonoBehaviour {
 				Gizmos.DrawWireCube(new Vector3(chunkX + chunkSize / 2f - 0.5f, 0.01f, chunkY + chunkSize / 2f - 0.5f), new Vector3(chunkSize, 0, chunkSize));
 			}
 		}
-	}
+	}*/
 }
