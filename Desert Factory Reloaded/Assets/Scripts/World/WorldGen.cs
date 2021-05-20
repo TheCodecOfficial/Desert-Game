@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldGen {
+
+	const float cutoff = 0.4f;
 	public static Tile[,] GenerateChunk(int x, int y) {
 		int chunkSize = WorldData.CHUNK_SIZE;
 		Tile[,] tiles = new Tile[chunkSize, chunkSize];
@@ -11,7 +13,7 @@ public class WorldGen {
 				int px = x * chunkSize + cx;
 				int py = y * chunkSize + cy;
 				float perlin = FractalNoise(px * 0.1f, py * 0.1f, 8, 6.5f, 0.5f);
-				int type = (perlin < 0.3f) ? 1 : 0;
+				int type = (perlin < cutoff) ? 1 : 0;
 				tiles[cx, cy] = new Tile(type);
 			}
 		}
