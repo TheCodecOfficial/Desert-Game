@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PathFinder
 {
-
     public static Dictionary<int, int, Node> G;
-
     public static List<Vector2Int> AStar(Vector2Int start, Vector2Int end)
     {
         Dictionary<int, int, Node> graph = new Dictionary<int, int, Node>();
@@ -18,7 +16,7 @@ public class PathFinder
         graph.Add(end.x, end.y, targetNode);
 
         Heap<Node> openSet = new Heap<Node>(1000);
-        HashSet<Node> closedSet = new HashSet<Node>();
+        //HashSet<Node> closedSet = new HashSet<Node>();
         openSet.Add(startNode);
 
         int maxHeapSize = 0;
@@ -27,7 +25,8 @@ public class PathFinder
         {
             maxHeapSize = Mathf.Max(maxHeapSize, openSet.Count);
             Node currentNode = openSet.Pop();
-            closedSet.Add(currentNode);
+            //closedSet.Add(currentNode);
+            currentNode.closed = true;
 
             if (currentNode == targetNode)
             {
@@ -41,7 +40,8 @@ public class PathFinder
 
             foreach (Node neighbor in GetNeighbors(graph, currentNode))
             {
-                if (neighbor.intraversable || closedSet.Contains(neighbor)) continue;
+                //if (neighbor.intraversable || closedSet.Contains(neighbor)) continue;
+                if (neighbor.intraversable || neighbor.closed) continue;
 
                 int moveCost = currentNode.gCost + GetDistance(currentNode, neighbor);
                 if (moveCost < neighbor.gCost || !openSet.Contains(neighbor))
@@ -93,7 +93,6 @@ public class PathFinder
 
         return neighbors;
     }
-
     static int GetDistance(Node from, Node to)
     {
         int dx = Mathf.Abs(from.x - to.x);
@@ -102,8 +101,6 @@ public class PathFinder
         return 10 * Mathf.Max(dx, dy) + 4 * Mathf.Min(dx, dy);
     }
 }
-
-
 public class Node : IHeapItem<Node>
 {
     public int x, y;
@@ -112,6 +109,8 @@ public class Node : IHeapItem<Node>
     int heapIndex;
 
     public int gCost, hCost;
+
+    public bool closed;
 
     public Node(int _x, int _y)
     {

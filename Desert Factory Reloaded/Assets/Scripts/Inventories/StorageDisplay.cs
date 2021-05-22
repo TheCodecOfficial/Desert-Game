@@ -11,11 +11,13 @@ public class StorageDisplay : MonoBehaviour
 
     public Item[] items;
 
-    public Transform[] slots;
+    public StorageSlotUI[] slots;
+
+    public Machine machine;
 
     void Start()
     {
-        inventory = new Storage(slots.Length);
+        inventory = machine.inventory;
     }
 
     void Update()
@@ -23,49 +25,47 @@ public class StorageDisplay : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             inventory.Add(items[0]);
+            Display();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             inventory.Add(items[1]);
+            Display();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             inventory.Add(items[2]);
+            Display();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             inventory.Add(items[3]);
+            Display();
         }
 
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            inventory.Print();
+            Display();
         }
         Display();
     }
 
     void Display()
     {
-        int index = 0;
-        foreach (Item item in inventory.inventory.Keys)
+        foreach (StorageSlotUI slot in slots)
         {
-            int slotsNeeded = Mathf.FloorToInt(inventory.inventory[item] / 4f);
-            for (int i = 0; i < slotsNeeded; i++){
-                DisplaySlot(slots[index], item, 4);
-                index++;
-            }
-            DisplaySlot(slots[index], item, inventory.inventory[item] - 4 * slotsNeeded);
-
-            //index++;
+            slot.Clear();
         }
-    }
 
-    void DisplaySlot(Transform slot, Item item, int amount)
-    {
-        slot.GetChild(0).GetComponent<Image>().sprite = item.sprite;
-        slot.GetChild(1).GetComponent<TextMeshProUGUI>().text = "" + amount;
+        List<ItemStack> distribution = inventory.GetDistribution();
+        int index = 0;
+        foreach (ItemStack stack in distribution)
+        {
+            slots[index].Display(stack);
+            index++;
+        }
     }
 }

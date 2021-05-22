@@ -2,21 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Machine : MonoBehaviour, Tickable
+public class Machine : MonoBehaviour, ITickable
 {
-    public float frequency;
-    float time;
+    public float delay;
+    int ticks;
 
+    public Storage inventory;
+    public Recipe recipe;
 
     void Start(){
+        inventory = new Storage(8);
         GameTimer.Join(this);
     }
-    void Update()
-    {
-        
+    public void ReceiveTick(){
+        ticks++;
+        if (ticks * 0.2f >= delay){
+            ticks = 0;
+            Craft();
+        }
     }
 
-    public void ReceiveTick(){
-        time += 1f;
+    void Craft(){
+        if (inventory.Contains(recipe.itemsIn)){
+            inventory.Remove(recipe.itemsIn);
+            inventory.Add(recipe.itemsOut);
+        }
     }
 }

@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldLoader : MonoBehaviour {
-
-	public Transform world;
-
-	//public Transform player;
-
 	public GameObject sandPrefab;
 	public GameObject cactusPrefab;
 
@@ -91,7 +86,7 @@ public class WorldLoader : MonoBehaviour {
 		int chunkY = y * chunkSize;
 
 		Transform chunkParent = new GameObject("Chunk " + x + ", " + y).transform;
-		chunkParent.SetParent(world);
+		chunkParent.SetParent(transform);
 		chunk.reference = chunkParent;
 		WorldData.chunks[x, y] = chunk;
 

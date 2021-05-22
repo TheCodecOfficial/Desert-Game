@@ -3,38 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameTimer : MonoBehaviour {
-    static List<Tickable> objectsToTick;
+    static List<ITickable> objectsToTick;
 
     float timer;
-    void Start(){
-        objectsToTick = new List<Tickable>();
-    }
 
-    public static void Join(Tickable obj){
+    public static void Join(ITickable obj){
+        if (objectsToTick == null) objectsToTick = new List<ITickable>();
         objectsToTick.Add(obj);
     }
 
     void Update(){
         timer += Time.deltaTime;
-        KindaExpensiveFunction();
-        if (timer >= 1f){
+        if (timer >= 0.2f){
             Tick();
             timer = 0;
         }
     }
 
     static void Tick(){
-        foreach (Tickable t in objectsToTick){
+        foreach (ITickable t in objectsToTick){
             t.ReceiveTick();
         }
     }
-
-    public static void KindaExpensiveFunction(){
-        for (int i = 0; i < 1000; i++){
-            float x = Mathf.Sqrt(Mathf.Sqrt(i));
-        }
-    }
 }
-public interface Tickable {
+public interface ITickable {
     void ReceiveTick();
 }
