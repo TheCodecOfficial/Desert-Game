@@ -14,8 +14,8 @@ public class PathFinder
         Node startNode = new Node(start.x, start.y);
         Node targetNode = new Node(end.x, end.y);
 
-        graph[start.x, start.y] = startNode;
-        graph[end.x, end.y] = targetNode;
+        graph.Add(start.x, start.y, startNode);
+        graph.Add(end.x, end.y, targetNode);
 
         Heap<Node> openSet = new Heap<Node>(1000);
         HashSet<Node> closedSet = new HashSet<Node>();
@@ -51,6 +51,7 @@ public class PathFinder
                     neighbor.predecessor = currentNode;
 
                     if (!openSet.Contains(neighbor)) openSet.Add(neighbor);
+                    else openSet.UpdateItem(neighbor);
                 }
             }
         }
@@ -85,7 +86,7 @@ public class PathFinder
             for (int j = -1; j <= 1; j++)
             {
                 if ((i + j) % 2 == 0) continue;
-                if (!graph.ContainsKey(x + i, y + j)) graph[x + i, y + j] = new Node(x + i, y + j);
+                if (!graph.ContainsKey(x + i, y + j)) graph.Add(x + i, y + j, new Node(x + i, y + j));
                 neighbors.Add(graph[x + i, y + j]);
             }
         }
@@ -117,8 +118,12 @@ public class Node : IHeapItem<Node>
         x = _x;
         y = _y;
 
-        Tile tile = WorldData.GetTile(x, y);
-        if (tile != null && tile.type != 0) intraversable = true;
+        if (!WorldData.ContainsTile(x, y)) intraversable = true;
+        else
+        {
+            Tile tile = WorldData.GetTile(x, y);
+            if (tile != null && tile.type != 0) intraversable = true;
+        }
     }
 
     public int fCost
