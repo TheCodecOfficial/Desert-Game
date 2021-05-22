@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 118730e1531fb8f4885dd136a8171806, type: 3}
-  m_Name: Iron
+  m_Name: Quartz
   m_EditorClassIdentifier: 
-  name: Iron
-  sprite: {fileID: 0}
+  name: Quartz
+  sprite: {fileID: 21300000, guid: 4924797b13bb4d542aaa6bfad0898cde, type: 3}

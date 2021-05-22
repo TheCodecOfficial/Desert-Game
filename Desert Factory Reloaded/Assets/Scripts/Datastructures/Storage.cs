@@ -12,7 +12,7 @@ public class Storage
     int maxSlots, slotSize;
     int size;
 
-    Dictionary<Item, int> inventory;
+    public Dictionary<Item, int> inventory;
 
     public Storage(int _maxSlots)
     {
