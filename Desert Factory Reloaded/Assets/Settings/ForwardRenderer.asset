@@ -53,7 +53,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RendererFeatures:
   - {fileID: -1363782546752516252}
-  m_RendererFeatureMap: 644ff0d5ffde12ed
+  - {fileID: 8800159365641124091}
+  m_RendererFeatureMap: 644ff0d5ffde12edfbb8dd5b5172207a
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:
@@ -74,11 +75,33 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_DefaultStencilState:
     overrideStencilState: 0
-    stencilReference: 0
-    stencilCompareFunction: 8
-    passOperation: 0
-    failOperation: 0
+    stencilReference: 1
+    stencilCompareFunction: 5
+    passOperation: 3
+    failOperation: 3
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
   m_AccurateGbufferNormals: 0
+--- !u!114 &8800159365641124091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62c9c65cf3354c93be831c8bc075510, type: 3}
+  m_Name: NewScreenSpaceAmbientOcclusion
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  m_Shader: {fileID: 4800000, guid: 0849e84e3d62649e8882e9d6f056a017, type: 3}
+  m_Settings:
+    Downsample: 0
+    Source: 1
+    NormalSamples: 1
+    Intensity: 5
+    DirectLightingStrength: 0.3
+    Radius: 0.035
+    SampleCount: 6

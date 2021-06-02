@@ -30,7 +30,7 @@ public class PathfinderDisplay : MonoBehaviour
         UnityEngine.Debug.Log("Path length: " + path.Count + ", in " + sw.ElapsedMilliseconds + " ms.");
     }
 
-    /*void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         if (path == null) return;
         Gizmos.color = new Color(0, 162, 255);
@@ -49,5 +49,5 @@ public class PathfinderDisplay : MonoBehaviour
                 Gizmos.DrawLine(from, to);
             }
         }
-    }*/
+    }
 }

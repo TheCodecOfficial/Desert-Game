@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class InputManager : MonoBehaviour
 {
     public Transform selectionOverlay;
-
-    public Machine machine;
     public Item cactus;
 
     // REALLY TEMPORARY
@@ -78,8 +76,6 @@ public class InputManager : MonoBehaviour
         if (timeOver)
         {
             Debug.Log("Harvest Cactus");
-
-            machine.inventory.Add(cactus);
 
             WorldData.UpdateTile(mousePos.x, mousePos.y, 0);
 

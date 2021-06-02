@@ -21,6 +21,7 @@ public class GameTimer : MonoBehaviour {
     }
 
     static void Tick(){
+        if (objectsToTick == null) return;
         foreach (ITickable t in objectsToTick){
             t.ReceiveTick();
         }

@@ -16,7 +16,6 @@ public class PathFinder
         graph.Add(end.x, end.y, targetNode);
 
         Heap<Node> openSet = new Heap<Node>(1000);
-        //HashSet<Node> closedSet = new HashSet<Node>();
         openSet.Add(startNode);
 
         int maxHeapSize = 0;
@@ -25,7 +24,6 @@ public class PathFinder
         {
             maxHeapSize = Mathf.Max(maxHeapSize, openSet.Count);
             Node currentNode = openSet.Pop();
-            //closedSet.Add(currentNode);
             currentNode.closed = true;
 
             if (currentNode == targetNode)
@@ -40,7 +38,6 @@ public class PathFinder
 
             foreach (Node neighbor in GetNeighbors(graph, currentNode))
             {
-                //if (neighbor.intraversable || closedSet.Contains(neighbor)) continue;
                 if (neighbor.intraversable || neighbor.closed) continue;
 
                 int moveCost = currentNode.gCost + GetDistance(currentNode, neighbor);
@@ -124,7 +121,6 @@ public class Node : IHeapItem<Node>
             if (tile != null && tile.type != 0) intraversable = true;
         }
     }
-
     public int fCost
     {
         get
@@ -132,7 +128,6 @@ public class Node : IHeapItem<Node>
             return gCost + hCost;
         }
     }
-
     public int HeapIndex
     {
         get
@@ -144,7 +139,6 @@ public class Node : IHeapItem<Node>
             heapIndex = value;
         }
     }
-
     public int CompareTo(Node other)
     {
         int cmp = fCost.CompareTo(other.fCost);
@@ -154,5 +148,4 @@ public class Node : IHeapItem<Node>
         }
         return -cmp;
     }
-
 }

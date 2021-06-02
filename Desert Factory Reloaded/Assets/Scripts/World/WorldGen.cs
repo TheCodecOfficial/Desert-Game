@@ -14,7 +14,7 @@ public class WorldGen {
 				int py = y * chunkSize + cy;
 				float perlin = FractalNoise(px * 0.1f, py * 0.1f, 8, 6.5f, 0.5f);
 				int type = (perlin < cutoff) ? 1 : 0;
-				tiles[cx, cy] = new Tile(type);
+				tiles[cx, cy] = new Tile(){type = type};
 			}
 		}
 		return tiles;
