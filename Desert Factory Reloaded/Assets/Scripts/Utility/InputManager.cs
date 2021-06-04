@@ -48,7 +48,7 @@ public class InputManager : MonoBehaviour
                 case 0:
                     // Mouse over sand / empty tile
                     if (selectedType == 1) PlantCactus();
-                    if (selectedType == 2) Debug.Log("place building");
+                    if (selectedType == 2) PlaceMachine();
                     break;
                 case 1:
                     // Mouse over cactus
@@ -67,6 +67,11 @@ public class InputManager : MonoBehaviour
     void PlantCactus()
     {
         WorldData.UpdateTile(mousePos.x, mousePos.y, 1);
+    }
+
+    void PlaceMachine(){
+        Machine machine = GameData.GetMachine("Solar Panel");
+        WorldData.UpdateTile(mousePos.x, mousePos.y, machine);
     }
 
     void HarvestCactus()

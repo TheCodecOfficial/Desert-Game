@@ -19,7 +19,8 @@ public class WorldData
         // Load saved chunks
         if (!System.IO.File.Exists(Application.dataPath + "/Saves/WORLDSAVE02.06.2021.bingus")) return;
         ChunkData[] worldChunkData = WorldSaver.LoadWorld(Application.dataPath + "/Saves/WORLDSAVE02.06.2021.bingus");
-        foreach (ChunkData chunkData in worldChunkData){
+        foreach (ChunkData chunkData in worldChunkData)
+        {
             int x = chunkData.x;
             int y = chunkData.y;
             chunks[x, y] = GenerateChunkFromData(chunkData);
@@ -33,7 +34,8 @@ public class WorldData
         return GenerateChunk(x, y, new Tile[CHUNK_SIZE, CHUNK_SIZE]);
     }
 
-    public static Chunk GenerateChunkFromData(ChunkData chunkData){
+    public static Chunk GenerateChunkFromData(ChunkData chunkData)
+    {
         Tile[,] tiles = new Tile[CHUNK_SIZE, CHUNK_SIZE];
         int index = 0;
         foreach (Tile tile in chunkData.data)
@@ -51,7 +53,7 @@ public class WorldData
         return chunk;
     }
     #endregion
-    
+
     #region Contains
     public static bool ContainsChunk(int x, int y)
     {
@@ -65,8 +67,8 @@ public class WorldData
 
     public static bool ContainsTile(int x, int y)
     {
-        Vector2Int cc = WorldToChunkCoords(x, y);
-        if (!ContainsChunk(cc.x, cc.y)) return false;
+        int4 coords = GetChunkAndTileCoords(x, y);
+        if (!ContainsChunk(coords.x, coords.y)) return false;
         else return (GetTile(x, y) != null);
     }
     #endregion
@@ -78,40 +80,59 @@ public class WorldData
         worldLoader.UpdateTile(x, y);
     }
 
-    public static void UpdateTile(int x, int y, Machine machine){
-        Tile tile = GetTile(x, y);
-        tile.type = 2; // Machine
+    public static void UpdateTile(int x, int y, Machine machine)
+    {
+
+        int4 coords = GetChunkAndTileCoords(x, y);
+        chunks[coords.x, coords.y].tiles[coords.a, coords.b] = new MachineTile(machine);
+
         worldLoader.UpdateTile(x, y);
     }
 
     public static Tile GetTile(int x, int y)
     {
-        Vector2Int chunkCoords = WorldToChunkCoords(x, y);
-        int cx = chunkCoords.x;
-        int cy = chunkCoords.y;
-        x %= CHUNK_SIZE;
-        y %= CHUNK_SIZE;
-
-        if (x < 0) x += CHUNK_SIZE;
-        if (y < 0) y += CHUNK_SIZE;
-
-        return chunks[cx, cy].tiles[x, y];
+        int4 coords = GetChunkAndTileCoords(x, y);
+        return chunks[coords.x, coords.y].tiles[coords.a, coords.b];
     }
 
     public static Chunk GetChunk(int x, int y)
     {
-        Vector2Int chunkCoords = WorldToChunkCoords(x, y);
-        int cx = chunkCoords.x;
-        int cy = chunkCoords.y;
+        int4 coords = GetChunkAndTileCoords(x, y);
+        int cx = coords.x;
+        int cy = coords.y;
         return chunks[cx, cy];
     }
 
-    static Vector2Int WorldToChunkCoords(int x, int y)
+    static int4 GetChunkAndTileCoords(int x, int y)
     {
         int cx = Mathf.FloorToInt((float)x / CHUNK_SIZE);
         int cy = Mathf.FloorToInt((float)y / CHUNK_SIZE);
-        return new Vector2Int(cx, cy);
+        x %= CHUNK_SIZE;
+        y %= CHUNK_SIZE;
+        if (x < 0) x += CHUNK_SIZE;
+        if (y < 0) y += CHUNK_SIZE;
+
+        int4 coords = new int4(x, y, cx, cy);
+        return coords;
     }
+
+    struct int4
+    {
+        public int a, b, x, y;
+        public int4(int _a, int _b, int _x, int _y)
+        {
+            a = _a;
+            b = _b;
+            x = _x;
+            y = _y;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0},{1},{2},{3}", a, b, x, y);
+        }
+    }
+
 }
 
 # region Objects/Structs
@@ -119,11 +140,13 @@ public struct Chunk
 {
     public Tile[,] tiles;
     public Transform reference;
-
-    public void Print(){
+    public void Print()
+    {
         string s = "";
-        for (int x = 0; x < tiles.GetLength(0); x++){
-            for (int y = 0; y < tiles.GetLength(1); y++){
+        for (int x = 0; x < tiles.GetLength(0); x++)
+        {
+            for (int y = 0; y < tiles.GetLength(1); y++)
+            {
                 s += tiles[x, y].type;
             }
             s += "\n";
@@ -141,18 +164,18 @@ public class Tile
     public int type;
 }
 
-class MachineTile : Tile {
+class MachineTile : Tile
+{
     public Machine machine;
 
-    public MachineTile(){
+    public MachineTile(Machine _machine)
+    {
         base.type = 2;
+        machine = _machine;
     }
 }
-
-
 public class Dictionary<TKey1, TKey2, TValue> : Dictionary<Tuple<TKey1, TKey2>, TValue>, IDictionary<Tuple<TKey1, TKey2>, TValue>
 {
-
     public TValue this[TKey1 key1, TKey2 key2]
     {
         get { return base[Tuple.Create(key1, key2)]; }

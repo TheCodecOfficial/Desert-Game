@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Storage
 {
     int slots { get { return GetSlots(); } }
-    int maxSlots, slotSize;
+    public int maxSlots, slotSize;
     Dictionary<Item, int> data;
 
     public Storage(int _maxSlots)

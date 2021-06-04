@@ -31,7 +31,6 @@ public class WorldLoader : MonoBehaviour
 
     public void LoadCycle()
     {
-        Debug.Log("Update");
         int chunkSize = WorldData.CHUNK_SIZE;
 
         HashSet<Chunk> chunksToLoad = new HashSet<Chunk>();
@@ -140,6 +139,7 @@ public class WorldLoader : MonoBehaviour
         Tile tile = WorldData.GetTile(x, y);
         Chunk chunk = WorldData.GetChunk(x, y);
         if (tile.objectReference != null) Destroy(tile.objectReference.gameObject);
+        Vector3 position = new Vector3(x, 0, y);
         if (tile.type == 0)
         {
             // Tile should be empty / sand
@@ -148,14 +148,20 @@ public class WorldLoader : MonoBehaviour
         else if (tile.type == 1)
         {
             // Tile should be cactus
-            Vector3 position = new Vector3(x, 0, y);
             Transform objectReference = Instantiate(cactusPrefab, position, Quaternion.identity, chunk.reference).transform;
             tile.objectReference = objectReference;
         }
         else
         {
             // Tile should be machine
-            // TODO
+            MachineTile machineTile = (MachineTile)tile;
+
+            GameObject machineObject = Instantiate(machineTile.machine.machinePrefab, position, Quaternion.identity, chunk.reference);
+            machineTile.objectReference = machineObject.transform;
+
+            MachineController machineController = machineObject.AddComponent<MachineController>();
+            machineController.recipes = machineTile.machine.recipes;
+            
         }
     }
 

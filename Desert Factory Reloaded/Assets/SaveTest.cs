@@ -22,7 +22,6 @@ public class SaveTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.H))
         {
-            //WorldSaver.LoadWorld("e.bingus");
             WorldSaver.LoadWorld(Application.dataPath + "/Saves/WORLDSAVE02.06.2021.bingus");
         }
     }

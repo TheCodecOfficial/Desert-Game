@@ -8,9 +8,8 @@ public class PathfinderDisplay : MonoBehaviour
 
     public Transform start, target;
     Vector2Int startVec, targetVec;
-
     List<Vector2Int> path;
-
+    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -18,7 +17,6 @@ public class PathfinderDisplay : MonoBehaviour
             UpdatePath();
         }
     }
-
     void UpdatePath()
     {
         startVec = new Vector2Int((int)start.position.x, (int)start.position.z);
@@ -30,7 +28,7 @@ public class PathfinderDisplay : MonoBehaviour
         UnityEngine.Debug.Log("Path length: " + path.Count + ", in " + sw.ElapsedMilliseconds + " ms.");
     }
 
-    void OnDrawGizmos()
+    /*void OnDrawGizmos()
     {
         if (path == null) return;
         Gizmos.color = new Color(0, 162, 255);
@@ -49,5 +47,5 @@ public class PathfinderDisplay : MonoBehaviour
                 Gizmos.DrawLine(from, to);
             }
         }
-    }
+    }*/
 }

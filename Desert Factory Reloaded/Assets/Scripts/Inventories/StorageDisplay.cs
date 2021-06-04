@@ -6,53 +6,16 @@ using TMPro;
 
 public class StorageDisplay : MonoBehaviour
 {
-
     Storage inventory;
 
     public Item[] items;
 
     public StorageSlotUI[] slots;
 
-    public Machine machine;
-
-    void Start()
-    {
-        inventory = machine.inventory;
+    private void Start() {
+        inventory = new Storage(8);
+        InventorySlotUIFiller.FillInventory(transform, inventory);
     }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            inventory.Add(items[0]);
-            Display();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            inventory.Add(items[1]);
-            Display();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            inventory.Add(items[2]);
-            Display();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            inventory.Add(items[3]);
-            Display();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Display();
-        }
-        Display();
-    }
-
     void Display()
     {
         foreach (StorageSlotUI slot in slots)
