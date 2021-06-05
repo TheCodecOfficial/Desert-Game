@@ -167,6 +167,7 @@ public class Tile
 class MachineTile : Tile
 {
     public Machine machine;
+    public MachineController machineController;
 
     public MachineTile(Machine _machine)
     {

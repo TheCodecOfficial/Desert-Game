@@ -161,7 +161,9 @@ public class WorldLoader : MonoBehaviour
 
             MachineController machineController = machineObject.AddComponent<MachineController>();
             machineController.recipes = machineTile.machine.recipes;
-            
+            machineController.Setup(x, y, 0);
+
+            machineTile.machineController = machineController;
         }
     }
 

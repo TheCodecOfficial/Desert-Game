@@ -30,4 +30,9 @@ public class GameData : MonoBehaviour
         Debug.LogError("Machine " + name + " not found");
         return null;
     }
+
+    public static Machine GetRandomMachine(){
+        List<ScriptableObject> values = new List<ScriptableObject>(machineDB.data.Values);
+        return (Machine) values[Random.Range(0, values.Count)];
+    }
 }

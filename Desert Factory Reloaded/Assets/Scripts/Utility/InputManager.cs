@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using TMPro;
+
 public class InputManager : MonoBehaviour
 {
     public Transform selectionOverlay;
@@ -10,12 +12,14 @@ public class InputManager : MonoBehaviour
 
     // REALLY TEMPORARY
     public int selectedType;
-
     public float ACTION_TIME = 1f;
     public float currentTileTime;
     bool timeOver;
 
     public Slider acionTimeSlider;
+
+    // DEBUG
+    public TextMeshProUGUI debugtext;
 
     Vector2Int mousePos;
 
@@ -26,6 +30,11 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
+        debugtext.text = selectedType == 0 ? "HARVEST CACTUS" : selectedType == 1 ? "PLACE CACTUS" : "PlACE SOLAR PANEL";
+        if (Input.GetKeyDown(KeyCode.Q)) selectedType--;
+        if (Input.GetKeyDown(KeyCode.E)) selectedType++;
+        selectedType = Mathf.Clamp(selectedType, 0, 2);
+        
         selectionOverlay.gameObject.SetActive(false);
 
         PlayerInfo.canMove = true;
@@ -70,7 +79,7 @@ public class InputManager : MonoBehaviour
     }
 
     void PlaceMachine(){
-        Machine machine = GameData.GetMachine("Solar Panel");
+        Machine machine = GameData.GetRandomMachine();
         WorldData.UpdateTile(mousePos.x, mousePos.y, machine);
     }
 
